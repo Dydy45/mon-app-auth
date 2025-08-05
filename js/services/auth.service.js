@@ -45,14 +45,7 @@ export class AuthService {
 
             if (error) throw error;
 
-            // Gestion de la persistance
-            if (rememberMe) {
-                this.supabase.auth.setSession({ 
-                    access_token: data.session.access_token, 
-                    refresh_token: data.session.refresh_token 
-                });
-            }
-
+            // Gestion de la persistance - la session est automatiquement gérée par Supabase
             this.saveSession(data.session);
             this.saveUser(data.user);
 
@@ -145,7 +138,7 @@ export class AuthService {
         storage.set(STORAGE_KEYS.USER, {
             id: user.id,
             email: user.email,
-            user_name: user.user_metadata?.user_name || user.email
+            user_name: user.user_metadata?.user_name || user.user_metadata?.full_name || user.email
         });
     }
 
